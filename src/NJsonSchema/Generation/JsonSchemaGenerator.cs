@@ -460,7 +460,11 @@ namespace NJsonSchema.Generation
                 }
                 else
                 {
-                    return (int)defaultValue;
+                    Console.WriteLine($"Default value: {defaultValue} -> to {defaultValue.GetType().GetTypeInfo().GetEnumUnderlyingType()}");
+                    if (defaultValue.GetType().GetTypeInfo().GetEnumUnderlyingType() == typeof(byte))
+                        return (byte)defaultValue;
+                    else
+                        return (int)defaultValue;
                 }
             }
             else
@@ -602,6 +606,7 @@ namespace NJsonSchema.Generation
             typeDescription.ApplyType(schema);
 
             var jsonSchemaAttribute = contextualType.GetInheritedAttribute<JsonSchemaAttribute>();
+            Console.WriteLine($"Array type: {contextualType}");
             var itemType = jsonSchemaAttribute?.ArrayItem.ToContextualType() ??
                            contextualType.EnumerableItemType ??
                            contextualType.GenericArguments.FirstOrDefault();
